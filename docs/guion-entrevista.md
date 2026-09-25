@@ -61,7 +61,7 @@ No necesitas explicar cada línea. Sigue un solo ejemplo: haces clic en **Marcar
 
 ## Antes de conectarte a Jitsi
 
-1. Enciende backend y frontend con las instrucciones del [README](../README.md).
-2. Comprueba que ves tres solicitudes. Si el ejemplo del estudio jurídico ya no está en **Recibida** porque lo usaste para practicar, registra una solicitud nueva.
+1. En dos terminales, ejecuta `.\mvnw.cmd spring-boot:run` dentro de `backend` y `npm run dev` dentro de `frontend`. Abre `http://localhost:5173`.
+2. Comprueba que aparecen las solicitudes. Si el ejemplo del estudio jurídico ya no está en **Recibida** porque lo usaste para practicar, registra una solicitud nueva.
 3. Deja abiertas la aplicación, la historia HU-03 y este guion.
 4. Haz un ensayo sin leer el texto. Si una frase no te sale natural, cámbiala por tus palabras.

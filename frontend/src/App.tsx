@@ -3,11 +3,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
-  ChevronRight,
-  ClipboardList,
-  FileText,
-  Inbox,
-  LayoutGrid,
   Plus,
   Search,
   Send,
@@ -148,16 +143,6 @@ function App() {
     [requests, role, filter, query, selected],
   );
 
-  const counts = useMemo(
-    () => ({
-      received: requests.filter((item) => item.status === "RECIBIDA").length,
-      analysis: requests.filter((item) => item.status === "EN_ANALISIS").length,
-      ready: requests.filter((item) => item.status === "LISTA_PARA_DESARROLLO")
-        .length,
-    }),
-    [requests],
-  );
-
   function openRequest(item: ServiceRequest) {
     setSelected(item);
     setRequirements(item.requirements);
@@ -240,22 +225,13 @@ function App() {
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
-        <button
-          className="brand"
-          onClick={() => navigate("inbox")}
-          aria-label="Ir a solicitudes"
-        >
-          <span className="brand__mark">
-            <ClipboardList size={21} strokeWidth={2.2} />
-          </span>
-          <span>
-            Solicitud<span className="brand__light">Clara</span>
-            <small>Portal de requerimientos</small>
-          </span>
-        </button>
-        <div className="sidebar__divider" />
-        <nav className="navigation" aria-label="Navegación principal">
+      <header className="site-header">
+        <div className="site-header__inner">
+          <button className="brand" onClick={() => navigate("inbox")}>
+            Solicitud Clara
+            <small>Proyecto personal de Matías Flores</small>
+          </button>
+          <nav className="navigation" aria-label="Navegación principal">
           <button
             className={
               page === "inbox" || page === "detail"
@@ -264,13 +240,7 @@ function App() {
             }
             onClick={() => navigate("inbox")}
           >
-            <Inbox size={18} /> Solicitudes{" "}
-            <span>
-              {role === "analyst"
-                ? requests.length
-                : requests.filter((item) => item.clientName === "Lucía Torres")
-                    .length}
-            </span>
+            Solicitudes
           </button>
           <button
             className={
@@ -278,7 +248,7 @@ function App() {
             }
             onClick={() => navigate("new")}
           >
-            <Plus size={18} /> Nueva solicitud
+            Nueva solicitud
           </button>
           <button
             className={
@@ -286,39 +256,12 @@ function App() {
             }
             onClick={() => navigate("guide")}
           >
-            <FileText size={18} /> Guía del proyecto
+            Sobre el proyecto
           </button>
-        </nav>
-        <div className="sidebar__bottom">
-          <div className="demo-note">
-            <span className="demo-note__icon">
-              <LayoutGrid size={18} />
-            </span>
-            <strong>Proyecto personal</strong>
-            <p>Un ejercicio para practicar requisitos y desarrollo web.</p>
-          </div>
-          <span className="sidebar__foot">Matías Flores · UPC</span>
-        </div>
-      </aside>
-
-      <div className="workspace">
-        <header className="topbar">
-          <span className="topbar__location">
-            {page === "detail"
-              ? "Solicitudes / Detalle"
-              : page === "new"
-                ? "Solicitudes / Nueva"
-                : page === "guide"
-                  ? "Proyecto / Guía"
-                  : "Solicitudes / Bandeja"}
-          </span>
-          <div className="topbar__right">
-            <span className="demo-label">Modo demo</span>
-            <div
-              className="role-switch"
-              role="group"
-              aria-label="Vista de demostración"
-            >
+          </nav>
+          <div className="role-control">
+            <span>Vista de ejemplo</span>
+            <div className="role-switch" role="group" aria-label="Vista de demostración">
               <button
                 className={role === "analyst" ? "selected" : ""}
                 onClick={() => changeRole("analyst")}
@@ -333,8 +276,10 @@ function App() {
               </button>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
+      <div className="workspace">
         <main className="main-content">
           {error && (
             <div className="message message--error" role="alert">
@@ -358,20 +303,15 @@ function App() {
             <section className="page-content">
               <div className="page-heading">
                 <div>
-                  <p className="overline">
-                    {role === "analyst"
-                      ? "Panel de análisis"
-                      : "Vista de Lucía Torres"}
-                  </p>
                   <h1>
                     {role === "analyst"
                       ? "Solicitudes"
-                      : "Estado de mis solicitudes"}
+                      : "Mis solicitudes"}
                   </h1>
                   <p className="page-intro">
                     {role === "analyst"
-                      ? "Una vista clara de lo que pidió cada cliente y de lo que falta definir."
-                      : "Consulta el avance de las solicitudes de Café del Parque."}
+                      ? "Aquí reviso los pedidos y escribo lo que hace falta antes de empezar a desarrollar."
+                      : "Aquí veo los pedidos de Café del Parque y en qué van."}
                   </p>
                 </div>
                 <button
@@ -381,22 +321,6 @@ function App() {
                   <Plus size={18} /> Nueva solicitud
                 </button>
               </div>
-              {role === "analyst" && !loading && (
-                <div className="summary-strip">
-                  <div>
-                    <span>Recibidas</span>
-                    <strong>{counts.received}</strong>
-                  </div>
-                  <div>
-                    <span>En análisis</span>
-                    <strong>{counts.analysis}</strong>
-                  </div>
-                  <div>
-                    <span>Listas para desarrollo</span>
-                    <strong>{counts.ready}</strong>
-                  </div>
-                </div>
-              )}
               <div className="list-toolbar">
                 <div
                   className="filters"
@@ -433,10 +357,8 @@ function App() {
               <div className="request-list">
                 <div className="request-list__header">
                   <span>Solicitud</span>
-                  <span>Servicio</span>
-                  <span>Actualización</span>
+                  <span>Tipo</span>
                   <span>Estado</span>
-                  <span />
                 </div>
                 {loading ? (
                   <div className="empty-state">
@@ -461,9 +383,7 @@ function App() {
                         </small>
                       </span>
                       <span>{item.serviceType}</span>
-                      <span>{formattedDate(item.updatedAt)}</span>
                       <StatusTag status={item.status} />
-                      <ChevronRight size={18} />
                     </button>
                   ))
                 )}
@@ -476,11 +396,10 @@ function App() {
               <button className="back-link" onClick={() => navigate("inbox")}>
                 <ArrowLeft size={17} /> Volver a solicitudes
               </button>
-              <p className="overline">Paso 1 de 3 · Registro</p>
-              <h1>Nueva solicitud</h1>
+              <h1>Registrar una solicitud</h1>
               <p className="page-intro">
-                Cuéntanos qué necesita tu negocio. Un analista organizará los
-                requisitos antes de iniciar el desarrollo.
+                Escribe qué necesitas y cuál es el problema. Los requisitos se
+                definirán después de revisar el pedido.
               </p>
               <form className="request-form" onSubmit={createRequest}>
                 <div className="form-section">
@@ -600,7 +519,7 @@ function App() {
               </button>
               <div className="detail-heading">
                 <div>
-                  <p className="overline">
+                  <p className="request-id">
                     Solicitud #{String(selected.id).padStart(3, "0")} ·{" "}
                     {selected.serviceType}
                   </p>
@@ -612,50 +531,12 @@ function App() {
                 </div>
                 <StatusTag status={selected.status} />
               </div>
-              <div
-                className="progress-track"
-                aria-label="Progreso de solicitud"
-              >
-                {(
-                  [
-                    ["RECIBIDA", "Solicitud recibida"],
-                    ["EN_ANALISIS", "Análisis de requisitos"],
-                    ["LISTA_PARA_DESARROLLO", "Lista para desarrollo"],
-                  ] as const
-                ).map(([step, label], index) => {
-                  const activeIndex = [
-                    "RECIBIDA",
-                    "EN_ANALISIS",
-                    "LISTA_PARA_DESARROLLO",
-                  ].indexOf(selected.status);
-                  return (
-                    <div
-                      className={
-                        index <= activeIndex
-                          ? "progress-step complete"
-                          : "progress-step"
-                      }
-                      key={step}
-                    >
-                      <span>
-                        {index < activeIndex ? <Check size={16} /> : index + 1}
-                      </span>
-                      <strong>{label}</strong>
-                    </div>
-                  );
-                })}
-              </div>
               <div className="detail-grid">
                 <div className="detail-primary">
                   <article className="content-section">
                     <div className="section-heading">
-                      <span className="section-heading__icon">
-                        <Inbox size={19} />
-                      </span>
-                      <div>
-                        <h2>Necesidad del cliente</h2>
-                        <p>Descripción original de la solicitud</p>
-                      </div>
+                      <h2>Lo que pidió el cliente</h2>
+                      <p>Descripción original de la solicitud</p>
                     </div>
                     <p className="request-description">
                       {selected.description}
@@ -676,13 +557,8 @@ function App() {
                   </article>
                   <article className="content-section">
                     <div className="section-heading">
-                      <span className="section-heading__icon">
-                        <ClipboardList size={19} />
-                      </span>
-                      <div>
-                        <h2>Requisitos funcionales</h2>
-                        <p>Qué debe permitir hacer la solución</p>
-                      </div>
+                      <h2>Requisitos funcionales</h2>
+                      <p>Qué debe permitir hacer la solución</p>
                     </div>
                     {role === "analyst" && selected.status === "EN_ANALISIS" ? (
                       <label className="editor-label">
@@ -718,13 +594,8 @@ function App() {
                 <div className="detail-secondary">
                   <article className="content-section">
                     <div className="section-heading">
-                      <span className="section-heading__icon">
-                        <Check size={19} />
-                      </span>
-                      <div>
-                        <h2>Criterios de aceptación</h2>
-                        <p>Cómo sabremos que funciona</p>
-                      </div>
+                      <h2>Criterios de aceptación</h2>
+                      <p>Cómo sabremos que funciona</p>
                     </div>
                     {role === "analyst" && selected.status === "EN_ANALISIS" ? (
                       <label className="editor-label">
@@ -758,7 +629,7 @@ function App() {
                   </article>
                   {role === "analyst" && (
                     <div className="action-panel">
-                      <h3>Próximo paso</h3>
+                      <h3>Qué sigue</h3>
                       {selected.status === "RECIBIDA" ? (
                         <>
                           <p>
@@ -839,24 +710,22 @@ function App() {
 
           {page === "guide" && (
             <section className="page-content page-content--narrow guide-page">
-              <p className="overline">Sobre el proyecto</p>
-              <h1>Del pedido a los requisitos</h1>
+              <h1>Por qué hice este proyecto</h1>
               <p className="page-intro">
-                Imaginé una empresa pequeña que recibe pedidos para hacer páginas
-                web y sistemas. Quise practicar cómo pasar de un mensaje del
-                cliente a requisitos que el equipo pueda revisar.
+                Quería practicar cómo ordenar un pedido antes de empezar a
+                programar. Para eso inventé una empresa pequeña que recibe
+                solicitudes de páginas web y sistemas.
               </p>
               <div className="guide-section">
-                <h2>Problema</h2>
+                <h2>La idea</h2>
                 <p>
-                  Un cliente puede decir "necesito una web", pero eso todavía
-                  deja muchas preguntas: qué páginas tendrá, quién actualizará
-                  el contenido y cómo sabremos que está terminada. Aquí guardo
-                  primero lo que pidió y luego escribo los requisitos.
+                  Un cliente puede decir "necesito una web", pero todavía faltan
+                  detalles. Primero guardo su pedido tal como lo explicó. Luego
+                  escribo qué debe hacer la solución y cómo comprobarlo.
                 </p>
               </div>
               <div className="guide-section">
-                <h2>Flujo principal</h2>
+                <h2>Lo que se puede hacer</h2>
                 <ol>
                   <li>El cliente registra su necesidad.</li>
                   <li>El analista revisa y redacta requisitos funcionales.</li>
@@ -867,11 +736,12 @@ function App() {
                 </ol>
               </div>
               <div className="guide-section">
-                <h2>Qué falta</h2>
+                <h2>Hasta dónde llega</h2>
                 <p>
-                  El cambio entre cliente y analista solo muestra dos puntos de
-                  vista. Todavía no hay inicio de sesión real. Para esta demo los
-                  datos se guardan en H2, una base local.
+                  Es un ejercicio, no una aplicación para clientes reales. El
+                  botón de vista solo ayuda a mostrar el recorrido: todavía no
+                  hay cuentas ni permisos. Los datos se guardan en H2, en mi
+                  computadora.
                 </p>
               </div>
               <button
