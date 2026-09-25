@@ -1,5 +1,7 @@
 # Historias de usuario y trazabilidad
 
+Escribí estas historias para el caso ficticio de Solicitud Clara. Las relacioné con las pantallas y rutas de la API para poder comprobar que cada función responde a una necesidad.
+
 ## HU-01 Registrar necesidad
 
 **Como** cliente, **quiero** describir mi necesidad y dejar mis datos de contacto **para** que un analista pueda revisarla.

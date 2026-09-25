@@ -1,35 +1,51 @@
 # Solicitud Clara
 
-Portal de demostración para registrar solicitudes de servicios digitales y convertir una necesidad del cliente en requisitos verificables. Está preparado para presentar tanto el trabajo de documentación funcional como una implementación frontend/backend.
+Soy estudiante de sexto ciclo de Ingeniería de Sistemas de Información en la UPC. Armé este proyecto personal para practicar una parte que me interesa de la carrera: tomar una necesidad contada de manera informal, escribir requisitos claros y conectarlos con una aplicación que funcione.
 
-## Qué funciona
+El caso es ficticio. Imaginé una pequeña empresa que recibe pedidos para crear sitios web o sistemas internos. Antes de empezar a programar, necesita entender qué pide cada cliente y cómo comprobar que el trabajo quedó bien.
 
-- Registro de una solicitud con datos de contacto, tipo de servicio y descripción del problema.
-- Bandeja con búsqueda, filtro por estado y detalle de cada solicitud.
-- Flujo **Recibida → En análisis → Lista para desarrollo**.
-- Redacción de requisitos funcionales y criterios de aceptación. La API impide finalizar el análisis si faltan.
-- Persistencia local: los cambios siguen disponibles al reiniciar la aplicación.
-- Vistas de demostración de cliente y analista.
+## Qué hace
 
-Los datos iniciales son ficticios. La vista de cliente representa a Lucía Torres, de Café del Parque. El cambio de vista es solo para explicar el flujo: **esta demo no implementa autenticación ni control de acceso**. No debe exponerse como servicio público con datos reales.
+1. Un cliente registra una solicitud y explica su problema.
+2. El analista revisa la solicitud y escribe requisitos funcionales.
+3. El analista agrega criterios de aceptación: condiciones concretas para comprobar el resultado.
+4. La solicitud pasa de **Recibida** a **En análisis** y luego a **Lista para desarrollo**. La API no permite saltarse pasos ni marcarla lista si faltan requisitos o criterios.
 
-## Tecnologías
+La bandeja permite buscar y filtrar solicitudes. Los datos se guardan en una base local, así que siguen ahí al reiniciar la aplicación.
 
-| Capa | Tecnología | Función |
+## Con qué lo hice
+
+| Parte | Tecnología | Para qué la usé |
 | --- | --- | --- |
-| Interfaz | React, TypeScript, Vite | Formularios, bandeja, detalle y estados |
-| API | Java 17, Spring Boot 3.5 | Validación y reglas del flujo |
-| Datos | Spring Data JPA, H2 | Persistencia local para la demo |
-| Pruebas | JUnit, MockMvc | Flujo de la API y validación |
+| Pantallas | React, TypeScript y Vite | Formulario, bandeja y detalle |
+| API | Java 17 y Spring Boot 3.5 | Recibir datos y validar el flujo |
+| Datos | JPA y H2 | Guardar solicitudes localmente |
+| Pruebas | JUnit y MockMvc | Comprobar el flujo y los datos inválidos |
+
+Elegí H2 para que la demo funcione en una laptop sin instalar un servidor de base de datos. Si el proyecto creciera, evaluaría PostgreSQL.
+
+## Documentación
+
+Preparé estos archivos para que se vea cómo pasé de la idea a los requisitos:
+
+- [Alcance y requisitos](docs/alcance-y-requisitos.md)
+- [Historias de usuario](docs/historias-de-usuario.md)
+- [Caso de uso del análisis](docs/caso-de-uso.md)
+- [Arquitectura y API](docs/arquitectura.md)
+- [Guion para explicar el proyecto](docs/guion-entrevista.md)
 
 ## Cómo ejecutarlo en Windows
 
-Se necesitan Java 17 y Node.js compatible con Vite 8. Usa dos terminales:
+Necesitas Java 17 y Node.js compatible con Vite 8. Abre dos terminales desde la carpeta del proyecto.
+
+Terminal 1:
 
 ```powershell
 cd backend
 .\mvnw.cmd spring-boot:run
 ```
+
+Terminal 2:
 
 ```powershell
 cd frontend
@@ -37,36 +53,22 @@ npm ci
 npm run dev
 ```
 
-Abre [http://localhost:5173](http://localhost:5173). El frontend usa un proxy local hacia la API en el puerto 8080. La primera ejecución carga tres casos ficticios. La base se guarda en `backend/data/` y está excluida de Git.
+Después entra a [http://localhost:5173](http://localhost:5173). La API se ejecuta en el puerto 8080. En la primera ejecución aparecen tres solicitudes ficticias.
 
-Para verificar:
+Para correr las pruebas:
 
 ```powershell
 cd backend
 .\mvnw.cmd test
 ```
 
+Para comprobar que el frontend compila:
+
 ```powershell
 cd frontend
 npm run build
 ```
 
-## Documentación del proyecto
+## Qué falta
 
-- [Alcance y requisitos](docs/alcance-y-requisitos.md)
-- [Historias de usuario y trazabilidad](docs/historias-de-usuario.md)
-- [Caso de uso del análisis](docs/caso-de-uso.md)
-- [Arquitectura y contrato de API](docs/arquitectura.md)
-- [Guion breve para la entrevista](docs/guion-entrevista.md)
-
-## Recorrido sugerido
-
-1. En la bandeja, abre una solicitud recibida.
-2. Inicia el análisis y redacta requisitos y criterios de aceptación.
-3. Guarda y marca la solicitud lista para desarrollo.
-4. Registra una solicitud nueva para enseñar el flujo desde la vista del cliente.
-5. Muestra en la documentación la historia de usuario, el caso de uso y la regla de transición correspondiente.
-
-## Límites conocidos
-
-El alcance se concentra en el análisis inicial. No incluye inicio de sesión real, notificaciones, archivos adjuntos, edición de datos de contacto ni despliegue en producción. Antes de usarlo con clientes reales harían falta autorización por rol, migraciones de base de datos, medidas de privacidad y pruebas adicionales.
+El botón para cambiar entre «Cliente» y «Analista» solo sirve para la demo. **Todavía no hay inicio de sesión ni permisos reales.** Tampoco hay archivos adjuntos, notificaciones ni despliegue público. No usaría esta versión con datos de clientes reales.

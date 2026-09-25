@@ -1,8 +1,8 @@
 # Alcance y requisitos de Solicitud Clara
 
-## Problema y objetivo
+## Situación que imaginé
 
-Una solicitud enviada por mensajes libres suele describir una idea sin separar el problema, las funcionalidades esperadas y las condiciones para aceptar el resultado. Solicitud Clara conserva la necesidad original y permite que un analista la convierta en requisitos funcionales y criterios de aceptación antes de pasarla a desarrollo.
+Para este ejercicio pensé en una empresa pequeña que recibe pedidos por mensajes. Alguien puede escribir «necesito una web», pero todavía faltan detalles para que un desarrollador sepa qué hacer. Mi objetivo fue guardar primero lo que dijo el cliente y después escribir requisitos y criterios para comprobar el resultado. No entrevisté a un cliente real; los ejemplos son ficticios.
 
 ## Usuarios
 
@@ -29,7 +29,7 @@ En la demo, la interfaz permite alternar entre vistas para explicar ambos puntos
 4. Ambos campos deben tener contenido para pasar a **Lista para desarrollo**.
 5. Una solicitud lista queda en modo de lectura en esta versión.
 
-Estas reglas se verifican en la API; el frontend también guía al usuario deshabilitando acciones que todavía no corresponden.
+La API comprueba estas reglas. La pantalla también desactiva las acciones que todavía no corresponden.
 
 ## Requisitos no funcionales para la demo
 
@@ -40,4 +40,4 @@ Estas reglas se verifican en la API; el frontend también guía al usuario desha
 
 ## Fuera de alcance
 
-Autenticación, permisos reales, notificaciones, adjuntos, asignación de desarrolladores, presupuesto, edición posterior al cierre del análisis y despliegue público. Se dejaron fuera para completar y explicar bien el flujo principal.
+No incluí login, permisos reales, notificaciones, adjuntos, presupuesto ni despliegue público. Me concentré en que el recorrido desde el pedido hasta los requisitos funcionara bien.

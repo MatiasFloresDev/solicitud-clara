@@ -11,13 +11,13 @@ flowchart LR
     J --> H[(H2 local)]
 ```
 
-El frontend usa `/api` a través del proxy de Vite durante desarrollo. El backend persiste en `backend/data/`. No se requieren credenciales ni servicios en la nube para la demostración.
+La pantalla envía peticiones a `/api`. Durante el desarrollo, Vite las dirige al backend. Spring Boot aplica las reglas y guarda los datos en `backend/data/`. La demo no necesita servicios en la nube.
 
 ## Modelo principal
 
 `ServiceRequest` contiene: `id`, `clientName`, `company`, `email`, `serviceType`, `title`, `description`, `status`, `requirements`, `acceptanceCriteria`, `createdAt` y `updatedAt`.
 
-Los requisitos y criterios se guardan como texto multilinea en esta versión. Una evolución para producción podría separarlos en entidades con identificador, prioridad e historial de cambios.
+Por ahora guardo los requisitos y criterios como texto, una línea por punto. Si continuara el proyecto, los separaría en registros individuales para poder asignar prioridad y llevar un historial.
 
 ## Estados
 
@@ -65,6 +65,6 @@ Ejemplo de análisis:
 
 ## Decisiones y límites
 
-- **H2 local:** prioriza que la demo arranque en cualquier laptop sin configurar PostgreSQL.
-- **Sin autenticación:** las vistas muestran el flujo de dos roles, pero no protegen datos. Es la principal tarea antes de un despliegue real.
-- **Validación en backend:** los estados y campos requeridos se verifican también en la API, incluso si una llamada no proviene de la interfaz.
+- **H2 local:** me permite iniciar la demo sin configurar PostgreSQL.
+- **Sin autenticación:** el selector de roles solo sirve para mostrar el flujo. No protege datos; sería lo primero que añadiría antes de usar datos reales.
+- **Validación en backend:** aunque alguien no use la pantalla, la API comprueba los campos y el orden de estados.

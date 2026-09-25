@@ -1,37 +1,67 @@
-# Guion de tres minutos para la entrevista
+# Cómo explicaría Solicitud Clara en la entrevista
 
-Este guion es una base. Léelo, comprueba cada afirmación en la aplicación y exprésalo con tus propias palabras.
+Esta es una guía para practicar, no un texto para leer palabra por palabra. Antes de la entrevista, abre el proyecto y haz el recorrido una vez tú mismo.
 
-## 0:00–0:35 Problema y propósito
+## Versión corta, de unos tres minutos
 
-«Preparé Solicitud Clara, un portal para organizar solicitudes de servicios digitales. La idea nace de un problema común: un cliente explica lo que quiere en un mensaje libre, pero todavía faltan requisitos precisos y una forma de comprobar si el resultado cumple lo esperado».
+**Inicio.** «Este es un proyecto personal que armé para practicar documentación y desarrollo web. Pensé en una empresa pequeña que recibe pedidos como “quiero una página web”, pero antes de programar necesita saber exactamente qué debe hacer esa página».
 
-## 0:35–1:15 Flujo del cliente
+**Muestra la bandeja.** «Cada pedido se registra como una solicitud. Aquí puedo ver quién lo hizo, qué necesita y en qué estado está. Voy a abrir este ejemplo de un estudio jurídico».
 
-Abre **Nueva solicitud**. Explica los campos y registra un ejemplo ficticio. Muestra que queda en estado **Recibida**.
+**Abre la solicitud “Web de presentación para estudio jurídico”.** «Esta parte es lo que dijo el cliente. No lo mezclo con los requisitos, porque primero quiero conservar su problema tal como lo explicó».
 
-«Separé los datos de contacto de la necesidad. Así el analista conserva el contexto original antes de proponer una solución».
+**Pulsa “Iniciar análisis”.** Escribe algo sencillo:
 
-## 1:15–2:15 Trabajo del analista
+- Requisito: «El visitante puede enviar una consulta desde el formulario de contacto».
+- Criterio: «Si completa nombre, correo y consulta, al enviarlo ve una confirmación».
 
-Abre la nueva solicitud. Selecciona **Iniciar análisis**, escribe dos requisitos y dos criterios, guarda y marca lista.
+Después pulsa **Guardar análisis** y **Marcar lista**. «Separé el requisito de la forma de comprobarlo. La API no deja marcar la solicitud como lista si falta uno de los dos».
 
-«La API controla el orden de estados. No permite pasar a desarrollo si faltan requisitos o criterios de aceptación».
+**Muestra una historia de usuario.** Abre [HU-03](historias-de-usuario.md#hu-03-documentar-solicitud). «También escribí historias de usuario, un caso de uso y las reglas de cambio de estado. Así puedo relacionar lo que se pidió, lo que hace la aplicación y lo que habría que probar».
 
-## 2:15–2:45 Documentación y tecnología
+**Cierre.** «El frontend está hecho con React y TypeScript. La API está en Java con Spring Boot y guarda los datos en H2 para que pueda mostrarlo localmente. Es un prototipo: el cambio de vista entre cliente y analista todavía no es un login real».
 
-Abre `docs/historias-de-usuario.md` y `docs/caso-de-uso.md`. Señala HU-03 y el flujo alternativo A1. Explica que la interfaz está hecha con React y TypeScript, la API con Java y Spring Boot, y la demo guarda los datos en H2 local.
+## Si solo te dan un minuto
 
-## 2:45–3:00 Aprendizaje y límite
+«Solicitud Clara es un proyecto personal para practicar análisis de requisitos. Un cliente registra lo que necesita; el analista escribe requisitos y criterios de aceptación; luego la solicitud pasa a lista para desarrollo. Lo importante para mí era que la documentación estuviera conectada con una app que realmente respetara esas reglas. Usé React para las pantallas, Spring Boot para la API y H2 para guardar los datos en la demo».
 
-«Este proyecto me permitió conectar análisis funcional con una implementación comprobable. Para usarlo en producción, el siguiente paso sería incorporar autenticación, permisos por rol y una base de datos gestionada».
+## Qué significa cada término
 
-## Preguntas posibles
+| Término | Cómo lo explicaría |
+| --- | --- |
+| Requisito funcional | Algo que el sistema debe permitir hacer. Ejemplo: enviar una consulta. |
+| Criterio de aceptación | Una forma concreta de comprobar el requisito. Ejemplo: después de enviar un formulario válido, aparece una confirmación. |
+| Historia de usuario | Una frase que dice quién necesita algo, qué necesita y para qué. |
+| API | La parte que recibe lo que envía la pantalla, aplica reglas y consulta o guarda datos. |
+| JPA | Una herramienta de Java que ayuda a guardar objetos en tablas de la base de datos. |
+| H2 | La base de datos local que elegí para que la demo arranque sin instalar PostgreSQL. |
 
-**¿Por qué criterios de aceptación?** Porque convierten un requisito en una condición que se puede verificar. Evitan que «funciona» signifique cosas distintas para cliente y equipo.
+## Si te piden enseñar el código
 
-**¿Por qué H2 y no PostgreSQL?** Para que la demo local arranque sin configurar un servidor. El modelo usa JPA, por lo que el cambio a PostgreSQL es viable, pero requeriría configuración y pruebas de migración.
+- [`App.tsx`](../frontend/src/App.tsx): contiene las pantallas y las llamadas a la API.
+- [`RequestController.java`](../backend/src/main/java/pe/com/solicitudclara/api/RequestController.java): recibe las solicitudes y los cambios de estado.
+- [`ServiceRequest.java`](../backend/src/main/java/pe/com/solicitudclara/api/ServiceRequest.java): guarda los campos y contiene las reglas del flujo.
+- [`DemoData.java`](../backend/src/main/java/pe/com/solicitudclara/api/DemoData.java): carga los tres ejemplos ficticios.
 
-**¿La vista de cliente es segura?** No. Es un modo de demostración y está señalado en la interfaz y el README. No se debe usar con datos reales ni publicarse como servicio de clientes sin autenticación y autorización.
+No necesitas explicar cada línea. Sigue un solo ejemplo: haces clic en **Marcar lista**, el frontend llama a la API, la API comprueba que haya requisitos y criterios, guarda el nuevo estado y devuelve la solicitud actualizada.
 
-**¿Qué hiciste tú?** Responde con precisión sobre las decisiones que revisaste y el trabajo que puedas explicar. Si usaste asistencia de IA, puedes decirlo y centrarte en cómo validaste requisitos, funcionamiento y límites. No atribuyas experiencia que no puedas defender.
+## Preguntas que podrían hacerte
+
+**¿Por qué hiciste este proyecto?** «Quería practicar algo que vemos en la carrera: pasar de una idea general a requisitos que otra persona pueda desarrollar y probar. También quería conectar esa documentación con frontend y backend».
+
+**¿Por qué hay tres estados?** «Para saber si el pedido apenas llegó, si todavía se está definiendo o si ya tiene información suficiente para que lo tome desarrollo».
+
+**¿Qué pasa si faltan criterios de aceptación?** «No se puede marcar como lista. Esa regla está en el backend, así que también se aplica si alguien llama a la API sin usar la pantalla».
+
+**¿Por qué H2?** «Para mostrar la demo en mi laptop sin configurar otro servidor. Para una versión real usaría una base más apropiada, como PostgreSQL, y probaría la migración».
+
+**¿Hay usuarios y permisos reales?** «No. El selector de cliente y analista es solo para enseñar el flujo. Antes de usar datos reales tendría que agregar autenticación y autorización».
+
+**¿Usaste IA?** Responde con honestidad. Una forma de decirlo es: «Sí, la usé como apoyo para avanzar en el prototipo. Yo elegí el problema que quería mostrar y revisé el flujo y la documentación. Puedo explicar qué hace cada parte y qué le falta». Usa esta respuesta solo después de haber revisado y probado el proyecto tú mismo.
+
+## Antes de conectarte a Jitsi
+
+1. Enciende backend y frontend con las instrucciones del [README](../README.md).
+2. Comprueba que ves tres solicitudes. Si el ejemplo del estudio jurídico ya no está en **Recibida** porque lo usaste para practicar, registra una solicitud nueva.
+3. Deja abiertas la aplicación, la historia HU-03 y este guion.
+4. Haz un ensayo sin leer el texto. Si una frase no te sale natural, cámbiala por tus palabras.
