@@ -143,6 +143,15 @@ function App() {
     [requests, role, filter, query, selected],
   );
 
+  const counts = useMemo(
+    () => ({
+      received: requests.filter((item) => item.status === "RECIBIDA").length,
+      analysis: requests.filter((item) => item.status === "EN_ANALISIS").length,
+      ready: requests.filter((item) => item.status === "LISTA_PARA_DESARROLLO").length,
+    }),
+    [requests],
+  );
+
   function openRequest(item: ServiceRequest) {
     setSelected(item);
     setRequirements(item.requirements);
@@ -229,7 +238,6 @@ function App() {
         <div className="site-header__inner">
           <button className="brand" onClick={() => navigate("inbox")}>
             Solicitud Clara
-            <small>Proyecto personal de Matías Flores</small>
           </button>
           <nav className="navigation" aria-label="Navegación principal">
           <button
@@ -310,8 +318,8 @@ function App() {
                   </h1>
                   <p className="page-intro">
                     {role === "analyst"
-                      ? "Aquí reviso los pedidos y escribo lo que hace falta antes de empezar a desarrollar."
-                      : "Aquí veo los pedidos de Café del Parque y en qué van."}
+                      ? "En cada pedido separo lo que dijo el cliente de los requisitos que voy definiendo."
+                      : "Así se ve el avance de los pedidos de Café del Parque."}
                   </p>
                 </div>
                 <button
@@ -321,6 +329,14 @@ function App() {
                   <Plus size={18} /> Nueva solicitud
                 </button>
               </div>
+              {role === "analyst" && !loading && (
+                <div className="summary-line" aria-label="Resumen de solicitudes">
+                  <strong>{requests.length} {requests.length === 1 ? "solicitud" : "solicitudes"}</strong>
+                  <span><i className="summary-dot summary-dot--received" />{counts.received} {counts.received === 1 ? "recibida" : "recibidas"}</span>
+                  <span><i className="summary-dot summary-dot--analysis" />{counts.analysis} en análisis</span>
+                  <span><i className="summary-dot summary-dot--ready" />{counts.ready} {counts.ready === 1 ? "lista" : "listas"}</span>
+                </div>
+              )}
               <div className="list-toolbar">
                 <div
                   className="filters"
@@ -356,6 +372,7 @@ function App() {
               </div>
               <div className="request-list">
                 <div className="request-list__header">
+                  <span>N.º</span>
                   <span>Solicitud</span>
                   <span>Tipo</span>
                   <span>Estado</span>
@@ -372,15 +389,14 @@ function App() {
                 ) : (
                   visible.map((item) => (
                     <button
-                      className="request-row"
+                      className={`request-row request-row--${item.status.toLowerCase()}`}
                       key={item.id}
                       onClick={() => openRequest(item)}
                     >
+                      <span className="request-row__number">{String(item.id).padStart(3, "0")}</span>
                       <span className="request-row__main">
                         <strong>{item.title}</strong>
-                        <small>
-                          {item.company} · #{String(item.id).padStart(3, "0")}
-                        </small>
+                        <small>{item.company}</small>
                       </span>
                       <span>{item.serviceType}</span>
                       <StatusTag status={item.status} />
