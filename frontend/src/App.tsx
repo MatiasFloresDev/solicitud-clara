@@ -158,7 +158,7 @@ function App() {
         </button>
         <div className="sidebar__divider" />
         <nav className="navigation" aria-label="Navegación principal">
-          <button className={page === 'inbox' || page === 'detail' ? 'navigation__item active' : 'navigation__item'} onClick={() => navigate('inbox')}><Inbox size={18} /> Solicitudes <span>{requests.length}</span></button>
+          <button className={page === 'inbox' || page === 'detail' ? 'navigation__item active' : 'navigation__item'} onClick={() => navigate('inbox')}><Inbox size={18} /> Solicitudes <span>{role === 'analyst' ? requests.length : requests.filter((item) => item.clientName === 'Lucía Torres').length}</span></button>
           <button className={page === 'new' ? 'navigation__item active' : 'navigation__item'} onClick={() => navigate('new')}><Plus size={18} /> Nueva solicitud</button>
           <button className={page === 'guide' ? 'navigation__item active' : 'navigation__item'} onClick={() => navigate('guide')}><FileText size={18} /> Guía del proyecto</button>
         </nav>
